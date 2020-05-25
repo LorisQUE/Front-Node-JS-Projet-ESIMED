@@ -1,4 +1,45 @@
-<div class="container">
-    <h3>Vue "Index"</h3>
+<div id="lists-container" class="container">
+
+    <h3>Listes des courses en cours</h3>
+    <hr>
+    <div id="list-block">
+        <div class="row">
+            <b><div class="col s5">Magasin</div>
+            <div class="col s5">Date</div>
+            <div class="col s1">Actions</div></b>
+        </div>
+
+        <div id="lists-body">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s5">
+            <input id="inputMagasin" type="text"><label for="inputMagasin" class="validate">Magasin</label>
+        </div>
+        <div class="input-field col s5">
+            <input id="inputDate" type="text" class="datepicker" readonly><label for="inputDate" class="validate">Date</label>
+        </div>
+        <a id="btnAdd" class="waves-effect waves-light btn icon-add" onclick="indexController.ajouterCourse()"><i class="material-icons left">add</i>Ajouter</a>
+    </div>
 </div>
 
+<!-- Modal Structure -->
+<div id="modal-modif-list" class="modal">
+    <div class="modal-content">
+        <h4 id="modal-title">Modification d'une liste</h4>
+        <div class="row">
+            <div class=" col s5">
+                <label for="inputMagasinModif" class="validate">Magasin</label><input id="inputMagasinModif" type="text" class="input-field">
+            </div>
+            <div class="col s1"></div>
+            <div class=" col s5">
+            <label for="inputDateModif" class="validate">Date</label><input id="inputDateModif" type="text" class="datepicker" readonly>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btn-valid-modif" class="waves-effect waves-light btn" onclick="indexController.updateCourse()"><i class="material-icons left">check</i>Valider</a>
+            <a class="modal-close waves-effect waves-teal btn-flat">Quitter</a>
+        </div>
+    </div>
+</div>
