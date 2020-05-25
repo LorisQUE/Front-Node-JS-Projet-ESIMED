@@ -4,15 +4,7 @@ class LoginController extends BaseController {
         this.svc = new UserAccountAPI();
     }
 
-    validateRequiredField(selector, name) {
-        const value =  $(selector).value;
-        if ((value == null) || (value === "")) {
-            this.toast(`Le champs '${name}' est obligatoire`);
-            $(selector).style.backgroundColor = 'antiquewhite';
-            return null
-        }
-        return value
-    }
+
 
     async authenticate() {
         let login = this.validateRequiredField('#inputMail', 'Adresse e-mail');
@@ -25,7 +17,7 @@ class LoginController extends BaseController {
                     $('#bandeau').style.display = "block";
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err);
                     if (err == 401) {
                         this.toast("Adresse e-mail ou mot de passe incorrect");
                     } else {

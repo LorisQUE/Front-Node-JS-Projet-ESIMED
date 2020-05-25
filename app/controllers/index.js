@@ -78,24 +78,21 @@ class IndexController extends BaseController {
     }
 
     async updateCourse(){
-        console.log(this.currentListUpdated)
-        let magasin = $('#inputMagasinModif').value.trim();
-        let date = $('#inputDateModif').value;
+        let magasin = this.validateRequiredField('#inputMagasinModif', 'Magasin');
+        let date = this.validateRequiredField('#inputDateModif', 'Date');
         this.currentListUpdated.label = magasin;
         this.currentListUpdated.date = date;
         console.log(this.currentListUpdated);
-        if(magasin == "" || magasin == undefined || date == undefined || date == '') this.toast('Les champs doivent être remplis')
-        else {
+        if(magasin != null && date != null){
             await this.model.updateList(this.currentListUpdated);
             this.getModal("#modal-modif-list").close();
             this.showCourse();
         }
     }
     async ajouterCourse(){
-        let magasin = $('#inputMagasin').value.trim();
-        let date = $('#inputDate').value;
-        if(magasin == "" || magasin == undefined || date == undefined || date == '') this.toast('Les champs doivent être remplis')
-        else {
+        let magasin = this.validateRequiredField('#inputMagasin', 'Magasin');
+        let date = this.validateRequiredField('#inputDate', 'Date');
+        if(magasin != null && date != null){
             let list = new List(null, magasin, date, false);
             await this.model.insertList(list);
             this.showCourse()

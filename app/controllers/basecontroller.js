@@ -33,7 +33,15 @@ class BaseController {
             navigate(view)
         }; history.pushState({}, '');
     }
-
+    validateRequiredField(selector, name) {
+        const value =  $(selector).value.trim();
+        if ((value == null) || (value === "")) {
+            this.toast(`Le champs '${name}' est obligatoire`);
+            $(selector).style.backgroundColor = 'antiquewhite';
+            return null
+        }
+        return value
+    }
     datepickerToFrench(){
         const Calender = $('.datepicker');
         M.Datepicker.init(Calender, {

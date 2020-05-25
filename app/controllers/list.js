@@ -58,18 +58,16 @@ class ListController extends BaseController {
 
     async ajouterItem(){
         try{
-        let quantite = $('#input-item-quantite').value.trim();
-        let label = $('#input-item-label').value.trim();
-        if(quantite == "" || quantite == undefined || label == undefined || label == '') this.toast('Les champs doivent être remplis')
-        else {
-            let item = new Item(null, label, quantite, this.list.id, false);
-            console.log(item)
-            await this.model.insertItem(item);
-            this.showItems();
-            this.toast(`${quantite} ${label} ajouté(s).`);
-            $('#input-item-quantite').value = '';
-            $('#input-item-label').value = '';
-        }
+            let quantite = this.validateRequiredField('#input-item-quantite', 'Quantité');
+            let label = this.validateRequiredField('#input-item-label', 'Label');
+            if(quantite != null && label != null){
+                let item = new Item(null, label, quantite, this.list.id, false);
+                await this.model.insertItem(item);
+                this.showItems();
+                this.toast(`${quantite} ${label} ajouté(s).`);
+                $('#input-item-quantite').value = '';
+                $('#input-item-label').value = '';
+            }
         }
         catch (e) {
             console.log(e)
@@ -85,12 +83,11 @@ class ListController extends BaseController {
     }
 
     async updateItem(){
-        let quantite = $('#input-item-modif-quantite').value.trim();
-        let label = $('#input-item-modif-label').value;
+        let quantite = this.validateRequiredField('#input-item-modif-quantite', 'Quantité');
+        let label = this.validateRequiredField('#input-item-modif-label', 'Label');
         this.currentItemUpdated.quantite = quantite;
         this.currentItemUpdated.label = label;
-        if(quantite == "" || quantite == undefined || label == undefined || label == '') this.toast('Les champs doivent être remplis')
-        else {
+        if(quantite != null && label != null){
             await this.model.updateItem(this.currentItemUpdated);
             this.showItems();
             this.getModal("#modal-modif-item").close();
