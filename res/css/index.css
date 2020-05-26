@@ -13,5 +13,6 @@
 .container-login { display: flex; justify-content: center; margin-top: 10%; }
 #lists-container { display: none; }
 #modal-modif-list #modal-title, .modal-content .row{ margin-bottom: 90px; }
+#modal-modif-list { min-height: 500px; }
 #modal-histo-title { margin: 15px;}
 #list-block { background-color: lightblue; /*border: #2672a6 1px solid;*/ margin-top: 35px; border-radius: 3px; box-shadow: lightgray 5px 5px 10px; padding-bottom: 5px; padding-top: 3px; }

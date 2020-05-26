@@ -49,9 +49,7 @@ class Model {
 
     async getItem(id) {
         try {
-            console.log(id)
             const item = Object.assign(new Item(), await this.itemApi.get(id))[0];
-            console.log(item)
             return item;
         } catch (e) {
             if (e === 404) return null;
@@ -62,11 +60,9 @@ class Model {
         return this.itemApi.delete(id).then(res => res.status)
     }
     insertItem(item) {
-        console.log('AAAA', item)
         return this.itemApi.insert(item).then(res => res.status)
     }
     updateItem(item) {
-        console.log('AAAA', item)
         return this.itemApi.update(item).then(res => res.status)
     }
 }

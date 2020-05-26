@@ -51,7 +51,6 @@ class IndexController extends BaseController {
             this.model.updateList(list);
             e.parentNode.removeChild(e);
         }
-        console.log(id)
     }
 
     async deleteCourse(id){
@@ -64,7 +63,6 @@ class IndexController extends BaseController {
             await this.displayDeletedMessage('indexController.undoDelete()');
             this.showCourse();
         }
-        console.log(id)
     }
     async modifCourse(id){
         console.log(this.currentListUpdated)

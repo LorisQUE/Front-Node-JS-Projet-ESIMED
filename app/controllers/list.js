@@ -44,7 +44,6 @@ class ListController extends BaseController {
     }
     async undoDelete() {
         if (this.deletedItem) {
-            console.log(this.deletedItem)
             this.model.insertItem(this.deletedItem).then(status => {
                 if (status == 200) {
                     this.deletedItem = null;
