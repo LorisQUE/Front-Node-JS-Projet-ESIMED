@@ -64,14 +64,14 @@ class HistoriqueController extends BaseController {
         }
     }
 
-    deleteCourse(id){
+    async deleteCourse(id){
         let e = $(`#row-${id}`);
         if(confirm("Êtes-vous sûr de vouloir supprimer cette liste de course ? ")){
+            let list = await this.model.getList(id);
             this.model.deleteList(id);
             this.toast(`${list.label} a été supprimé !`);
             e.parentNode.removeChild(e);
         }
-        console.log(id)
     }
 }
 

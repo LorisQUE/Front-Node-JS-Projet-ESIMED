@@ -60,15 +60,13 @@ class IndexController extends BaseController {
             this.model.deleteList(id);
             this.deletedList = list;
             e.parentNode.removeChild(e);
-            await this.displayDeletedMessage('indexController.undoDelete()');
+            this.displayDeletedMessage('indexController.undoDelete()');
             this.showCourse();
         }
     }
     async modifCourse(id){
-        console.log(this.currentListUpdated)
         let list = await this.model.getList(id);
         this.currentListUpdated = list;
-        console.log(this.currentListUpdated)
         const date = list.date.toLocaleDateString();
         $('#inputMagasinModif').value = list.label;
         $('#inputDateModif').value = date;
@@ -80,7 +78,6 @@ class IndexController extends BaseController {
         let date = this.validateRequiredField('#inputDateModif', 'Date');
         this.currentListUpdated.label = magasin;
         this.currentListUpdated.date = date;
-        console.log(this.currentListUpdated);
         if(magasin != null && date != null){
             await this.model.updateList(this.currentListUpdated);
             this.getModal("#modal-modif-list").close();
@@ -100,14 +97,14 @@ class IndexController extends BaseController {
         }
     }
 
-    async undoDelete() {
+    undoDelete() {
         if (this.deletedList) {
             this.model.insertList(this.deletedList).then(status => {
                 if (status == 200) {
                     this.deletedList = null;
                     this.displayUndoDone();
                 }
-            }).then(this.showCourse())
+            }).then(_ =>this.showCourse())
                 .catch(_ => this.displayServiceError());
         }
     }

@@ -42,14 +42,14 @@ class ListController extends BaseController {
             console.log(e);
         }
     }
-    async undoDelete() {
+    undoDelete() {
         if (this.deletedItem) {
             this.model.insertItem(this.deletedItem).then(status => {
                 if (status == 200) {
                     this.deletedItem = null;
                     this.displayUndoDone();
                 }
-            }).then(this.showCourse())
+            }).then(_ => this.showItems())
                 .catch(_ => this.displayServiceError())
 
         }
@@ -61,11 +61,12 @@ class ListController extends BaseController {
             let label = this.validateRequiredField('#input-item-label', 'Label');
             if(quantite != null && label != null){
                 let item = new Item(null, label, quantite, this.list.id, false);
-                await this.model.insertItem(item);
-                this.showItems();
-                this.toast(`${quantite} ${label} ajouté(s).`);
-                $('#input-item-quantite').value = '';
-                $('#input-item-label').value = '';
+                await this.model.insertItem(item).then(_ =>{
+                    this.showItems();
+                    this.toast(`${quantite} ${label} ajouté(s).`);
+                    $('#input-item-quantite').value = '';
+                    $('#input-item-label').value = '';
+                });
             }
         }
         catch (e) {
