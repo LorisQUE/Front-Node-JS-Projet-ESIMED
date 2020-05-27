@@ -19,6 +19,7 @@ class Model {
             return list;
         } catch (e) {
             if (e === 404) return null;
+            if (e === 403) return 403;
             return undefined;
         }
     }
@@ -53,6 +54,7 @@ class Model {
             return item;
         } catch (e) {
             if (e === 404) return null;
+            if (e === 403) return 403;
             return undefined;
         }
     }

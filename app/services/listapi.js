@@ -13,7 +13,7 @@ class ListAPI extends BaseAPIService{
         return fetch(`${this.url}/${id}`, { method: 'DELETE', headers: this.headers })
     }
     insert(list) {
-        this.headers.set( 'Content-Type', 'application/json' )
+        this.headers.set( 'Content-Type', 'application/json' );
         return fetch(this.url, {
             method: 'POST',
             headers: this.headers,
@@ -21,7 +21,7 @@ class ListAPI extends BaseAPIService{
         })
     }
     update(list) {
-        this.headers.set( 'Content-Type', 'application/json' )
+        this.headers.set( 'Content-Type', 'application/json' );
         return fetch(this.url, {
             method: 'PUT',
             headers: this.headers,

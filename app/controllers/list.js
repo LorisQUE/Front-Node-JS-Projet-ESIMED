@@ -14,7 +14,7 @@ class ListController extends BaseController {
         for (const item of await this.model.getAllItemsFromList(this.list.id)) {
             item.ischecked ? chk = 'checked' : chk = '';
             content += `<div id='row-${item.id}' class='row row-item'>
-                <div class="col s1"><label class="input-field col s1"><input id="check-${item.id}" type="checkbox" ${chk} onclick="listController.clickCheck(this, ${item.id})"/><span></span></label></div>
+                <div class="col s1"><label class="input-field col s1"><input id="check-${item.id}" type="checkbox" ${chk} onclick="listController.clickCheck(this, ${item.id}, event)"/><span></span></label></div>
                 <div class="col s2">${item.quantite}</div>
                 <div class="col s7">${item.label}</div>
                 <div class="col s2">
@@ -30,6 +30,7 @@ class ListController extends BaseController {
         try {
             let e = $(`#row-${id}`);
             let item = await this.model.getItem(id);
+            if(!this.checkError(item)) return;
             if (confirm("Êtes-vous sûr de vouloir supprimer cette liste de course ? ")) {
                 await this.model.deleteItem(id);
                 this.deletedItem = item;
@@ -63,7 +64,7 @@ class ListController extends BaseController {
                 let item = new Item(null, label, quantite, this.list.id, false);
                 await this.model.insertItem(item).then(_ =>{
                     this.showItems();
-                    this.toast(`${quantite} ${label} ajouté(s).`);
+                    this.toast(quantite == 1 ? `1 ${label} ajouté.` : `${quantite} ${label} ajoutés.`);
                     $('#input-item-quantite').value = '';
                     $('#input-item-label').value = '';
                 });
@@ -75,11 +76,18 @@ class ListController extends BaseController {
     }
 
     async modifItem(id){
-        let item = await this.model.getItem(id);
-        this.currentItemUpdated = item;
-        $('#input-item-modif-quantite').value = item.quantite;
-        $('#input-item-modif-label').value = item.label;
-        this.getModal("#modal-modif-item").open();
+        try{
+            let item = await this.model.getItem(id);
+            if(!this.checkError(item)) return;
+            this.currentItemUpdated = item;
+            $('#input-item-modif-quantite').value = item.quantite;
+            $('#input-item-modif-label').value = item.label;
+            this.getModal("#modal-modif-item").open();
+        }
+        catch (e) {
+            console.log(e);
+            this.displayServiceError();
+        }
     }
 
     async updateItem(){
@@ -94,8 +102,11 @@ class ListController extends BaseController {
         }
     }
 
-    async clickCheck(e, id){
+    async clickCheck(e, id, event){
+        event.preventDefault(); //Empêche la checkbox de check/uncheck toute seule
         let item = await this.model.getItem(id);
+        if(!this.checkError(item)) return;
+        e.checked = (e.checked ? false : true); //Si l'item est 'bon' on peux le switcher
         item.ischecked = e.checked;
         await this.model.updateItem(item);
     }

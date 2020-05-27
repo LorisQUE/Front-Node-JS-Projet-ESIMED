@@ -10,6 +10,13 @@ class BaseController {
             window.location.replace("login.html")
         }
     }
+    checkError(obj){
+        console.log('obj',obj)
+        if(obj === null) return this.displayNotFoundError();
+        else if(obj === undefined) return this.displayServiceError();
+        else if(obj === 403) return this.displayUnauthorizedError();
+        else return true;
+    }
     toast(msg) {
         M.toast({html: msg, classes: 'rounded'})
     }
@@ -18,6 +25,9 @@ class BaseController {
     }
     displayUndoDone() {
         this.toast('Opération annulée')
+    }
+    displayUnauthorizedError(){
+        this.toast('Vous n\'avez pas les droits nécessaires');
     }
     displayNotFoundError() {
         this.toast('Entité inexistante')

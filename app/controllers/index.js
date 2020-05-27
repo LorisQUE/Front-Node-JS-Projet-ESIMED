@@ -35,18 +35,25 @@ class IndexController extends BaseController {
     }
 
     async openList(id){
-        let e = event.target;
-        if (e.className !== "btn waves-effect waves-light" && e.className !== "material-icons") {
-            let list = await this.model.getList(id);
-            self.currentList = list;
-            navigate('list');
+        try{
+            let e = event.target;
+            if (e.className !== "btn waves-effect waves-light" && e.className !== "material-icons") {
+                let list = await this.model.getList(id);
+                if(!this.checkError(list)) return;
+                self.currentList = list;
+                navigate('list');
+            }
+        }catch (e) {
+            console.log(e);
+            this.displayServiceError();
         }
     }
 
     async archiveCourse(id){
         let e = $(`#row-${id}`);
+        let list = await this.model.getList(id);
+        if(!this.checkError(list)) return;
         if(confirm("Êtes-vous sûr de vouloir archiver cette liste de course ? ")){
-            let list = await this.model.getList(id);
             list.isarchived = true;
             this.model.updateList(list);
             e.parentNode.removeChild(e);
@@ -54,46 +61,68 @@ class IndexController extends BaseController {
     }
 
     async deleteCourse(id){
-        let e = $(`#row-${id}`);
-        let list = await this.model.getList(id);
-        if(confirm("Êtes-vous sûr de vouloir supprimer cette liste de course ? ")){
-            this.model.deleteList(id);
-            this.deletedList = list;
-            e.parentNode.removeChild(e);
-            this.displayDeletedMessage('indexController.undoDelete()');
-            this.showCourse();
+        try{
+            let e = $(`#row-${id}`);
+            let list = await this.model.getList(id);
+            if(!this.checkError(list)) return;
+            if(confirm("Êtes-vous sûr de vouloir supprimer cette liste de course ? ")){
+                this.model.deleteList(id);
+                this.deletedList = list;
+                e.parentNode.removeChild(e);
+                this.displayDeletedMessage('indexController.undoDelete()');
+                this.showCourse();
+            }
+        }catch (e) {
+            console.log(e);
+            this.displayServiceError();
         }
     }
     async modifCourse(id){
-        let list = await this.model.getList(id);
-        this.currentListUpdated = list;
-        const date = list.date.toLocaleDateString();
-        $('#inputMagasinModif').value = list.label;
-        $('#inputDateModif').value = date;
-        this.getModal("#modal-modif-list").open();
+        this.model.getList(id)
+            .then(list => {
+                if(!this.checkError(list)) return;
+                this.currentListUpdated = list;
+                const date = list.date.toLocaleDateString();
+                $('#inputMagasinModif').value = list.label;
+                $('#inputDateModif').value = date;
+                this.getModal("#modal-modif-list").open();
+            }).catch( e => {
+                console.log(e);
+                this.displayServiceError();
+            })
     }
 
     async updateCourse(){
-        let magasin = this.validateRequiredField('#inputMagasinModif', 'Magasin');
-        let date = this.validateRequiredField('#inputDateModif', 'Date');
-        this.currentListUpdated.label = magasin;
-        this.currentListUpdated.date = date;
-        if(magasin != null && date != null){
-            await this.model.updateList(this.currentListUpdated);
-            this.getModal("#modal-modif-list").close();
-            this.showCourse();
+        try{
+            let magasin = this.validateRequiredField('#inputMagasinModif', 'Magasin');
+            let date = this.validateRequiredField('#inputDateModif', 'Date');
+            this.currentListUpdated.label = magasin;
+            this.currentListUpdated.date = date;
+            if(magasin != null && date != null){
+                await this.model.updateList(this.currentListUpdated);
+                this.getModal("#modal-modif-list").close();
+                this.showCourse();
+            }
+        }catch (e) {
+            console.log(e);
+            this.displayServiceError();
         }
     }
     async ajouterCourse(){
-        let magasin = this.validateRequiredField('#inputMagasin', 'Magasin');
-        let date = this.validateRequiredField('#inputDate', 'Date');
-        if(magasin != null && date != null){
-            let list = new List(null, magasin, date, false);
-            await this.model.insertList(list);
-            this.showCourse()
-                .then(this.toast(`La course du ${date} pour ${magasin} a été ajouté !`));
-            $('#inputMagasin').value = '';
-            $('#inputDate').value = '';
+        try{
+            let magasin = this.validateRequiredField('#inputMagasin', 'Magasin');
+            let date = this.validateRequiredField('#inputDate', 'Date');
+            if(magasin != null && date != null){
+                let list = new List(null, magasin, date, false);
+                await this.model.insertList(list);
+                this.showCourse()
+                    .then(this.toast(`La course du ${date} pour ${magasin} a été ajouté !`));
+                $('#inputMagasin').value = '';
+                $('#inputDate').value = '';
+            }
+        }catch (e) {
+            console.log(e);
+            this.displayServiceError();
         }
     }
 

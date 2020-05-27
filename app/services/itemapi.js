@@ -12,7 +12,7 @@ class ItemAPI extends BaseAPIService{
         return fetchJSON(`${this.url}/${id}`, this.token)
     }
     delete(id) {
-        this.headers.delete('Content-Type')
+        this.headers.delete('Content-Type');
         return fetch(`${this.url}/${id}`, { method: 'DELETE', headers: this.headers })
     }
     insert(item) {
