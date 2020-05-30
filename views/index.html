@@ -1,6 +1,6 @@
 <div id="lists-container" class="container">
 
-    <h3>Listes des courses en cours</h3>
+    <h3>Mes listes de courses en cours</h3>
     <hr>
     <div id="list-block">
         <div class="row">
@@ -24,12 +24,12 @@
     </div>
 </div>
 
-<!-- Modal Structure -->
+<!-- Modal Structure Pour la modification de liste -->
 <div id="modal-modif-list" class="modal">
     <div class="modal-content">
-        <h4 id="modal-title">Modification d'une liste</h4>
+        <h4 class="modal-title">Modification d'une liste</h4>
         <div class="row">
-            <div class=" col s5">
+            <div class="col s5">
                 <label for="inputMagasinModif" class="validate">Magasin</label><input id="inputMagasinModif" type="text" class="input-field">
             </div>
             <div class="col s1"></div>
@@ -39,6 +39,52 @@
         </div>
         <div class="modal-footer">
             <a id="btn-valid-modif" class="waves-effect waves-light btn" onclick="indexController.updateCourse()"><i class="material-icons left">check</i>Valider</a>
+            <a class="modal-close waves-effect waves-teal btn-flat">Quitter</a>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Structure Pour l'ajout de partage -->
+<div id="modal-ajout-partage" class="modal">
+    <div class="modal-content">
+        <h4 class="modal-title">Partager la liste</h4>
+        <div class="row">
+            <div class="col s5">
+                <h6>Sélectionner l'utilisateur : </h6>
+            </div>
+            <div class="col s5">
+                <h6>Définir ses droits : </h6>
+            </div>
+        </div>
+        <div class="row">
+                <div id="ajout-partage-search" class="col s5">
+                    <div class="input-field col s10">
+                        <i class="material-icons prefix">search</i>
+                        <select id="ajout-partage-select-input">
+                        </select>
+                    </div>
+                </div>
+                <div id="ajout-partage-radio" class="col s5" onchange="console.log($('#ajout-partage-radio'))">
+                    <label>
+                        <input class="with-gap" name="group3" type="radio" id="partage-ajout-radio-lecture" value="false" checked />
+                        <span>Lecture seule</span>
+                    </label>
+                    <label>
+                        <input class="with-gap" name="group3" type="radio"  id="partage-ajout-radio-ecriture" value="true" />
+                        <span>Lecture écriture</span>
+                    </label>
+                </div>
+        </div>
+        <div class="row">
+            <div class="col s5">
+                <label id="ajout-partage-user-selection" class="small-text">Vous n'avez sélectionner personne</label>
+            </div>
+            <div class="col s5">
+                <label class="small-text"></label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btn-valid-ajout-partage" class="waves-effect waves-light btn" onclick="indexController.updateCourse()"><i class="material-icons left">check</i>Valider</a>
             <a class="modal-close waves-effect waves-teal btn-flat">Quitter</a>
         </div>
     </div>

@@ -15,10 +15,12 @@ class IndexController extends BaseController {
                     content += `
                         <div id="row-${list.id}" class="row row-list" onclick="indexController.openList(${list.id})">
                             <div class="col s5">${list.label}</div>
-                            <div class="col s5">${date}</div>
-                            <div class="col s2">
+                            <div class="col s4">${date}</div>
+                            <div class="col s3">
                             <a class="btn waves-effect waves-light" title="Modifier" onclick="indexController.modifCourse(${list.id});"><i class="material-icons">create</i></a>
                             <a class="btn waves-effect waves-light" title="Archiver" onclick="indexController.archiveCourse(${list.id});"><i class="material-icons">archive</i></a>
+                            <a class="btn waves-effect waves-light" title="Partager" onclick="indexController.ajoutPartageModal(${list.id})"><i class="material-icons">share</i></a>
+                            <a class="btn waves-effect waves-light" title="Information" onclick="alert('Indisponible')"><i class="material-icons">info_outline</i></a>
                             <a class="btn waves-effect waves-light" title="Supprimer" onclick="indexController.deleteCourse(${list.id});"><i class="material-icons">delete</i></a>
                             </div>
                         </div>
@@ -136,6 +138,38 @@ class IndexController extends BaseController {
             }).then(_ =>this.showCourse())
                 .catch(_ => this.displayServiceError());
         }
+    }
+
+    async ajoutPartageModal(id){
+        const users = await this.model.getAllUser();
+        const list = await this.model.getList(id);
+        console.log(users, list);
+
+
+        var elem = $('#ajout-partage-select-input');
+        var instances = M.FormSelect.init(elem, users);
+        var instance = M.FormSelect.getInstance(elem);
+
+        console.log('instances',instances,'ELEM', elem, 'instance',instance)
+        console.log('oooooooooooo', instance.getSelectedValues())
+
+        //$('#ajout-partage-select-input').formSelect();
+
+
+        /*let select = document.createElement("select");
+        select.name = "users";
+        select.id = "ajout-partage-select-input";
+        for (let user of users){
+            let option = document.createElement("option");
+            option.value = user.id;
+            option.text = user.login;
+            select.appendChild(option);
+            console.log(user, option)
+        }
+        $('#ajout-partage-search-container').appendChild(select);
+        console.log($('#ajout-partage-select-input'))*/
+
+        this.getModal('#modal-ajout-partage').open();
     }
 
 }

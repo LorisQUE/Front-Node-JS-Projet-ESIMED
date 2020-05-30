@@ -18,7 +18,10 @@ function fetchJSON(url, token) {
                 reject(res.status)
             }
         })
-        .catch(err => reject(err)))
+        .catch(err => {
+            console.log(err, 'eeee')
+            reject(err);
+        }))
 }
 
 function include(selector, url, urlcontroller) {

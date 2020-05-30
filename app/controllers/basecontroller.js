@@ -11,7 +11,6 @@ class BaseController {
         }
     }
     checkError(obj){
-        console.log('obj',obj)
         if(obj === null) return this.displayNotFoundError();
         else if(obj === undefined) return this.displayServiceError();
         else if(obj === 403) return this.displayUnauthorizedError();

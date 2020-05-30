@@ -4,7 +4,7 @@ class List {
         this.label = label;
         this.date = date;
         this.isarchived = isarchived;
-    }
+    };
 }
 
 class Item {
@@ -14,5 +14,22 @@ class Item {
         this.label = label;
         this.ischecked = ischecked;
         this.listid = listId;
-    }
+    };
+}
+
+class User {
+    constructor(id, name, login) {
+        this.id = id;
+        this.displayname = name;
+        this.login = login;
+    };
+}
+
+class Partage {
+    constructor(id, user_id, list_id, droit) {
+        this.id = id;
+        this.user_id = user_id;
+        this.list_id = list_id;
+        this.droit = droit;
+    };
 }

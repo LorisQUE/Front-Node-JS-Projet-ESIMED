@@ -15,6 +15,7 @@
             <a class="brand-logo"><i class="material-icons">shopping_cart</i>Listes de courses</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a onclick="navigate('index')">Accueil</a></li>
+                <li><a onclick="">Partagées</a></li>
                 <li><a onclick="navigate('historique')">Historique</a></li>
                 <li><a onclick="if(confirm('Êtes vous sûr de vouloir vous déconnecter ?')){  sessionStorage.removeItem('token'); navigate('login'); $('#bandeau').style.display = 'none';}">Déconnecter</a> </li>
             </ul>
@@ -29,6 +30,7 @@
     <script type="application/ecmascript" src="app/services/useraccountapi.js"></script>
     <script type="application/ecmascript" src="app/services/listapi.js"></script>
     <script type="application/ecmascript" src="app/services/itemapi.js"></script>
+    <script type="application/ecmascript" src="app/services/partageapi.js"></script>
     <script type="application/ecmascript" src="app/controllers/basecontroller.js"></script>
     <script type="application/ecmascript" src="app/controllers/index.js"></script>
     <script>

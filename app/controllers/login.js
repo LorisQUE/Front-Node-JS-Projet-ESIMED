@@ -2,10 +2,7 @@ class LoginController extends BaseController {
     constructor() {
         super();
         this.svc = new UserAccountAPI();
-    }
-
-
-
+    };
     async authenticate() {
         let login = this.validateRequiredField('#inputMail', 'Adresse e-mail');
         let password = this.validateRequiredField('#inputPass', 'Mot de passe');
@@ -23,9 +20,9 @@ class LoginController extends BaseController {
                     } else {
                         this.displayServiceError();
                     }
-                })
-        }
-    }
+                });
+        };
+    };
 }
 
 window.loginController = new LoginController();
