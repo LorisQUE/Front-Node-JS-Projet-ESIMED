@@ -106,7 +106,6 @@ class ListController extends BaseController {
     async modifItem(id){
         try{
             let item = this.flagDetailsProp ? await this.model.getItem(id) :  await this.model.getItemPartage(id);
-            console.log(item)
             if(!this.checkError(item)) return;
             this.currentItemUpdated = item;
             $('#input-item-modif-quantite').value = item.quantite;
@@ -134,7 +133,6 @@ class ListController extends BaseController {
     async clickCheck(e, id, event){
         event.preventDefault(); //Empêche la checkbox de check/uncheck toute seule
         let item = this.flagDetailsProp ? await this.model.getItem(id) :  await this.model.getItemPartage(id);
-        console.log(item)
         if(!this.checkError(item)) return;
         e.checked = (e.checked ? false : true); //Si l'item est 'bon' on peux le switcher
         item.ischecked = e.checked;

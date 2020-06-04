@@ -144,7 +144,8 @@ class IndexController extends BaseController {
     async ajoutPartageModal(id){
         this.selectedUser = null;
         this.listId = id;
-        const users = await this.model.getAllUser();
+        const users = await this.model.getAllUser(); //tous les users
+        const sharedUsers = await this.model.getAllPartageFromList(id); //Les users qui ont déjà un partage de cette liste
         const infoSelect = $('#ajout-partage-user-selection');
         const input = $('#ajout-partage-autocomplete-input');
         const options = {};
@@ -155,13 +156,18 @@ class IndexController extends BaseController {
         input.value = null;
         $('#radio-partage-lecture').checked = true;
 
-        for(let i = 0; i < users.length; i++){ options[users[i].login] = null; }
+        for(let i = 0; i < users.length; i++){ //Parcours sur TOUS les users
+            sharedUsers.map( x => { //Parcours sur les users qui ont déjà cette liste en partage
+                if(users[i].id == x.user_id) users.splice(i, 1); //Si l'user est dféjà partager on le vire du tableau
+            });
+            if(!!users[i]) options[users[i].login] = null; //Si l'user est toujours dans le tableau on le push dans les options
+        }
 
         var elem = $('#ajout-partage-autocomplete-input');
         M.Autocomplete.init(elem, {data:options, minLength: 3, onAutocomplete: e =>{
                 result = users.filter(x => x.login === e);
                 this.selectedUser = result[0];
-                infoSelect.innerHTML = (`Vous avez sélectionné ${result[0].displayname}`);
+                infoSelect.innerHTML = (`Vous avez sélectionné <label class='important-stuff'>${result[0].displayname}</label>.`);
         }});
 
         this.getModal('#modal-ajout-partage').open();
@@ -177,7 +183,7 @@ class IndexController extends BaseController {
             .then(this.getModal('#modal-ajout-partage').close())
             .catch( e=> console.log(e))
         }catch (e) {
-            console.log('Erreur : : ', e)
+            console.log('Erreur : ', e)
         }
 
     }
