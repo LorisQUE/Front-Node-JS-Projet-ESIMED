@@ -4,7 +4,7 @@ class Model {
         this.itemApi = new ItemAPI();
         this.userApi = new UserAccountAPI();
         this.partageApi = new PartageAPI();
-    }
+    };
     /*
     REGION DES LISTES
      */
@@ -37,7 +37,7 @@ class Model {
             if (e === 403) return 403;
             return undefined;
         }
-    }
+    };
     deleteList(id) {
         return this.listApi.delete(id).then(res => res.status);
     };
@@ -46,6 +46,9 @@ class Model {
     };
     updateList(list) {
         return this.listApi.update(list).then(res => res.status);
+    };
+    updateListPartage(list){
+        return this.listApi.updateListPartage(list).then(res => res.status);
     };
 
     /*
@@ -65,15 +68,13 @@ class Model {
         }
         return items;
     };
-
     async getItemsPartage(id){
         let items = [];
         for (let item of await this.itemApi.getItemsPartage(id)){
             items.push(Object.assign(new Item(), item));
         }
         return items;
-    }
-
+    };
     async getItem(id) {
         try {
             const item = Object.assign(new Item(), await this.itemApi.get(id))[0];
@@ -84,7 +85,6 @@ class Model {
             return undefined;
         }
     };
-
     async getItemPartage(id){
         try{
             const item = Object.assign(new Item(), await this.itemApi.getItemPartage(id))[0];
@@ -94,16 +94,21 @@ class Model {
             if (e === 403) return 403;
             return undefined;
         }
-    }
-
+    };
     deleteItem(id) {
         return this.itemApi.delete(id).then(res => res.status);
+    };
+    deletePartageItem(id) {
+        return this.itemApi.deletePartage(id).then(res => res.status);
     };
     insertItem(item) {
         return this.itemApi.insert(item).then(res => res.status);
     };
     updateItem(item) {
         return this.itemApi.update(item).then(res => res.status);
+    };
+    updatePartageItem(item) {
+        return this.itemApi.updatePartage(item).then(res => res.status);
     };
 
     /*

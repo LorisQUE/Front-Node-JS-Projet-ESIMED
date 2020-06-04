@@ -31,4 +31,12 @@ class ListAPI extends BaseAPIService{
             body: JSON.stringify(list)
         });
     };
+    updateListPartage(list) {
+        this.headers.set( 'Content-Type', 'application/json' );
+        return fetch(this.url+'Partage', {
+            method: 'PUT',
+            headers: this.headers,
+            body: JSON.stringify(list)
+        });
+    };
 }

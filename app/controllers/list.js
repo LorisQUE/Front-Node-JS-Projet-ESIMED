@@ -33,11 +33,12 @@ class ListController extends BaseController {
         this.list.droit ? '' : $('#adding-item').style.display = 'none';
         let checked = this.list.droit ? '' : 'disabled="disabled"';
         let content = '';
-        const actions = this.list.droit ? '<a class="btn waves-effect waves-light" title="Modifier" onclick="listController.modifItem(${item.id})"><i class="material-icons">create</i></a>\n' +
-            '                            <a class="btn waves-effect waves-light" title="Supprimer" onclick="listController.deleteItem(${item.id})"><i class="material-icons">delete</i></a>' : 'Vous n\'avez pas les droits';
         $('#title-item-list').innerHTML = 'Liste du ' + date + ' pour ' + this.list.label;
 
         for (const item of await this.model.getItemsPartage(this.list.id)) {
+            const actions = this.list.droit ? `<a class="btn waves-effect waves-light" title="Modifier" onclick="listController.modifItem(${item.id})"><i class="material-icons">create</i></a>\n` +
+                                              `<a class="btn waves-effect waves-light" title="Supprimer" onclick="listController.deleteItem(${item.id})"><i class="material-icons">delete</i></a>`
+                                            : 'Vous n\'avez pas les droits';
             item.ischecked ? chk = 'checked' : chk = '';
             content += `<div id='row-${item.id}' class='row row-item'>
                 <div class="col s1"><label class="input-field col s1"><input id="check-${item.id}" type="checkbox" ${chk} ${checked} onclick="listController.clickCheck(this, ${item.id}, event)"/><span></span></label></div>
@@ -55,10 +56,11 @@ class ListController extends BaseController {
     async deleteItem(id){
         try {
             let e = $(`#row-${id}`);
-            let item = await this.model.getItem(id);
+            let item = this.flagDetailsProp ? await this.model.getItem(id) :  await this.model.getItemPartage(id);
+            console.log(item)
             if(!this.checkError(item)) return;
             if (confirm("Êtes-vous sûr de vouloir supprimer cette liste de course ? ")) {
-                await this.model.deleteItem(id);
+                this.flagDetailsProp ? await this.model.deleteItem(id) : await this.model.deletePartageItem(id);
                 this.deletedItem = item;
                 e.parentNode.removeChild(e);
                 await this.displayDeletedMessage('listController.undoDelete()');
@@ -103,7 +105,8 @@ class ListController extends BaseController {
 
     async modifItem(id){
         try{
-            let item = await this.model.getItem(id);
+            let item = this.flagDetailsProp ? await this.model.getItem(id) :  await this.model.getItemPartage(id);
+            console.log(item)
             if(!this.checkError(item)) return;
             this.currentItemUpdated = item;
             $('#input-item-modif-quantite').value = item.quantite;
@@ -122,7 +125,7 @@ class ListController extends BaseController {
         this.currentItemUpdated.quantite = quantite;
         this.currentItemUpdated.label = label;
         if(quantite != null && label != null){
-            await this.model.updateItem(this.currentItemUpdated);
+            this.flagDetailsProp ? await this.model.updateItem(this.currentItemUpdated) : await this.model.updatePartageItem(this.currentItemUpdated);
             this.flagDetailsProp ? this.showItems() : this.showItemsPartage();
             this.getModal("#modal-modif-item").close();
         }
@@ -130,11 +133,12 @@ class ListController extends BaseController {
 
     async clickCheck(e, id, event){
         event.preventDefault(); //Empêche la checkbox de check/uncheck toute seule
-        let item = await this.model.getItem(id);
+        let item = this.flagDetailsProp ? await this.model.getItem(id) :  await this.model.getItemPartage(id);
+        console.log(item)
         if(!this.checkError(item)) return;
         e.checked = (e.checked ? false : true); //Si l'item est 'bon' on peux le switcher
         item.ischecked = e.checked;
-        await this.model.updateItem(item);
+        this.flagDetailsProp ? await this.model.updateItem(item) : await this.model.updatePartageItem(item);
     }
 
 }

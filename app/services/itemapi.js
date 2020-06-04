@@ -21,6 +21,10 @@ class ItemAPI extends BaseAPIService{
         this.headers.delete('Content-Type');
         return fetch(`${this.url}/${id}`, { method: 'DELETE', headers: this.headers })
     }
+    deletePartage(id) {
+        this.headers.delete('Content-Type');
+        return fetch(`${this.url}Partage/${id}`, { method: 'DELETE', headers: this.headers })
+    }
     insert(item) {
         this.headers.set( 'Content-Type', 'application/json' );
         return fetch(this.url, {
@@ -32,6 +36,14 @@ class ItemAPI extends BaseAPIService{
     update(item) {
         this.headers.set( 'Content-Type', 'application/json' );
         return fetch(this.url, {
+            method: 'PUT',
+            headers: this.headers,
+            body: JSON.stringify(item)
+        })
+    }
+    updatePartage(item) {
+        this.headers.set( 'Content-Type', 'application/json' );
+        return fetch(this.url+'Partage', {
             method: 'PUT',
             headers: this.headers,
             body: JSON.stringify(item)

@@ -10,7 +10,7 @@ class PartageController extends BaseController {
         let listContainer = $('#lists-body');
         try {
             for (const list of await this.model.getAllPartage()) {
-                let modif = list.droit ? '<a class="btn waves-effect waves-light" title="Modifier" onclick="partageController.modifCourse(${list.id});"><i class="material-icons">create</i></a>' : 'Modification impossible';
+                let modif = list.droit ? `<a class="btn waves-effect waves-light" title="Modifier" onclick="partageController.modifCourse(${list.list_id});"><i class="material-icons">create</i></a>` : 'Modification impossible';
                 if (!list.isarchived) {
                     const date = list.date.toLocaleDateString();
                     content += `
@@ -51,7 +51,7 @@ class PartageController extends BaseController {
     }
 
     async modifCourse(id) {
-        this.model.getList(id)
+        this.model.getListPartage(id)
             .then(list => {
                 if (!this.checkError(list)) return;
                 this.currentListUpdated = list;
@@ -72,7 +72,7 @@ class PartageController extends BaseController {
             this.currentListUpdated.label = magasin;
             this.currentListUpdated.date = date;
             if (magasin != null && date != null) {
-                await this.model.updateList(this.currentListUpdated);
+                await this.model.updateListPartage(this.currentListUpdated);
                 this.getModal("#modal-modif-list").close();
                 this.showCourse();
             }
