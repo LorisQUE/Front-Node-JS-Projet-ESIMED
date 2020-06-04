@@ -2,7 +2,8 @@ class ListController extends BaseController {
     constructor() {
         super();
         this.list = self.currentList;
-        this.showItems();
+        this.flagDetailsProp = self.flagDetailsProp;
+        this.flagDetailsProp ? this.showItems() : this.showItemsPartage()
     }
 
     async showItems(){
@@ -26,6 +27,31 @@ class ListController extends BaseController {
 
     }
 
+    async showItemsPartage(){
+        let date = this.list.date.toLocaleDateString();
+        let chk = '';
+        this.list.droit ? '' : $('#adding-item').style.display = 'none';
+        let checked = this.list.droit ? '' : 'disabled="disabled"';
+        let content = '';
+        const actions = this.list.droit ? '<a class="btn waves-effect waves-light" title="Modifier" onclick="listController.modifItem(${item.id})"><i class="material-icons">create</i></a>\n' +
+            '                            <a class="btn waves-effect waves-light" title="Supprimer" onclick="listController.deleteItem(${item.id})"><i class="material-icons">delete</i></a>' : 'Vous n\'avez pas les droits';
+        $('#title-item-list').innerHTML = 'Liste du ' + date + ' pour ' + this.list.label;
+
+        for (const item of await this.model.getItemsPartage(this.list.id)) {
+            item.ischecked ? chk = 'checked' : chk = '';
+            content += `<div id='row-${item.id}' class='row row-item'>
+                <div class="col s1"><label class="input-field col s1"><input id="check-${item.id}" type="checkbox" ${chk} ${checked} onclick="listController.clickCheck(this, ${item.id}, event)"/><span></span></label></div>
+                <div class="col s2">${item.quantite}</div>
+                <div class="col s7">${item.label}</div>
+                <div class="col s2">
+                            ${actions}
+                </div>
+            </div>`
+        }
+        $('#list-item-body').innerHTML = content;
+
+    }
+
     async deleteItem(id){
         try {
             let e = $(`#row-${id}`);
@@ -36,7 +62,7 @@ class ListController extends BaseController {
                 this.deletedItem = item;
                 e.parentNode.removeChild(e);
                 await this.displayDeletedMessage('listController.undoDelete()');
-                this.showItems();
+                this.flagDetailsProp ? this.showItems() : this.showItemsPartage();
             }
         }
         catch (e) {
@@ -50,7 +76,7 @@ class ListController extends BaseController {
                     this.deletedItem = null;
                     this.displayUndoDone();
                 }
-            }).then(_ => this.showItems())
+            }).then(_ => this.flagDetailsProp ? this.showItems() : this.showItemsPartage())
                 .catch(_ => this.displayServiceError())
 
         }
@@ -63,7 +89,7 @@ class ListController extends BaseController {
             if(quantite != null && label != null){
                 let item = new Item(null, label, quantite, this.list.id, false);
                 await this.model.insertItem(item).then(_ =>{
-                    this.showItems();
+                    this.flagDetailsProp ? this.showItems() : this.showItemsPartage();
                     this.toast(quantite == 1 ? `1 ${label} ajouté.` : `${quantite} ${label} ajoutés.`);
                     $('#input-item-quantite').value = '';
                     $('#input-item-label').value = '';
@@ -97,7 +123,7 @@ class ListController extends BaseController {
         this.currentItemUpdated.label = label;
         if(quantite != null && label != null){
             await this.model.updateItem(this.currentItemUpdated);
-            this.showItems();
+            this.flagDetailsProp ? this.showItems() : this.showItemsPartage();
             this.getModal("#modal-modif-item").close();
         }
     }

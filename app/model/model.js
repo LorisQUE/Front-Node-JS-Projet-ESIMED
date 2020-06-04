@@ -18,7 +18,7 @@ class Model {
     };
     async getList(id) {
         try {
-            const list = Object.assign(new List(), await this.listApi.get(id))[0];
+            const list = Object.assign(new List(), await this.listApi.get(id));
             list.date = new Date(list.date);
             return list;
         } catch (e) {
@@ -27,6 +27,17 @@ class Model {
             return undefined;
         }
     };
+    async getListPartage(id){
+        try {
+            const list = Object.assign(new List(), await this.listApi.getListPartage(id));
+            list.date = new Date(list.date);
+            return list;
+        }catch (e) {
+            if (e === 404) return null;
+            if (e === 403) return 403;
+            return undefined;
+        }
+    }
     deleteList(id) {
         return this.listApi.delete(id).then(res => res.status);
     };
@@ -55,6 +66,14 @@ class Model {
         return items;
     };
 
+    async getItemsPartage(id){
+        let items = [];
+        for (let item of await this.itemApi.getItemsPartage(id)){
+            items.push(Object.assign(new Item(), item));
+        }
+        return items;
+    }
+
     async getItem(id) {
         try {
             const item = Object.assign(new Item(), await this.itemApi.get(id))[0];
@@ -63,8 +82,20 @@ class Model {
             if (e === 404) return null;
             if (e === 403) return 403;
             return undefined;
-        };
+        }
     };
+
+    async getItemPartage(id){
+        try{
+            const item = Object.assign(new Item(), await this.itemApi.getItemPartage(id))[0];
+            return item;
+        } catch (e) {
+            if (e === 404) return null;
+            if (e === 403) return 403;
+            return undefined;
+        }
+    }
+
     deleteItem(id) {
         return this.itemApi.delete(id).then(res => res.status);
     };
@@ -93,6 +124,7 @@ class Model {
     async getAllPartage(){
         let partages = [];
         for(let partage of await this.partageApi.getAll()){
+            partage.date = new Date(partage.date);
             partages.push(Object.assign(new Partage(), partage));
         }
         return partages;
@@ -118,12 +150,28 @@ class Model {
       }
     };
     insertPartage(partage){
-        return this.partageApi.insert(partage);
+        try{ return this.partageApi.insert(partage);}
+        catch (e) {
+            if (e === 404) return null;
+            if (e === 403) return 403;
+            return undefined;
+        }
     };
     updatePartage(partage){
-        return this.partageApi.update(partage);
+        try {return this.partageApi.update(partage);}
+        catch (e) {
+            if (e === 404) return null;
+            if (e === 403) return 403;
+            return undefined;
+        }
     };
     deletePartage(id){
-        return this.partageApi.delete(id);
+        try{return this.partageApi.delete(id);}
+        catch (e) {
+            console.log(e)
+            if (e === 404) return null;
+            if (e === 403) return 403;
+            return undefined;
+        }
     };
 }

@@ -8,8 +8,14 @@ class ItemAPI extends BaseAPIService{
     getAllFromList(id) {
         return fetchJSON(`${this.url}s/${id}`, this.token)
     }
+    getItemsPartage(id){
+        return fetchJSON(`${this.url}sPartage/${id}`, this.token)
+    }
     get(id) {
         return fetchJSON(`${this.url}/${id}`, this.token)
+    }
+    getItemPartage(id){
+        return fetchJSON(`${this.url}Partage/${id}`, this.token)
     }
     delete(id) {
         this.headers.delete('Content-Type');

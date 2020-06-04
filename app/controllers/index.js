@@ -20,7 +20,7 @@ class IndexController extends BaseController {
                             <a class="btn waves-effect waves-light" title="Modifier" onclick="indexController.modifCourse(${list.id});"><i class="material-icons">create</i></a>
                             <a class="btn waves-effect waves-light" title="Archiver" onclick="indexController.archiveCourse(${list.id});"><i class="material-icons">archive</i></a>
                             <a class="btn waves-effect waves-light" title="Partager" onclick="indexController.ajoutPartageModal(${list.id})"><i class="material-icons">share</i></a>
-                            <a class="btn waves-effect waves-light" title="Information" onclick="alert('Indisponible')"><i class="material-icons">info_outline</i></a>
+                            <a class="btn waves-effect waves-light" title="Information" onclick="indexController.openPartage(${list.id})"><i class="material-icons">info_outline</i></a>
                             <a class="btn waves-effect waves-light" title="Supprimer" onclick="indexController.deleteCourse(${list.id});"><i class="material-icons">delete</i></a>
                             </div>
                         </div>
@@ -43,6 +43,7 @@ class IndexController extends BaseController {
                 let list = await this.model.getList(id);
                 if(!this.checkError(list)) return;
                 self.currentList = list;
+                self.flagDetailsProp = true;
                 navigate('list');
             }
         }catch (e) {
@@ -141,35 +142,99 @@ class IndexController extends BaseController {
     }
 
     async ajoutPartageModal(id){
+        this.selectedUser = null;
+        this.listId = id;
         const users = await this.model.getAllUser();
-        const list = await this.model.getList(id);
-        console.log(users, list);
+        const infoSelect = $('#ajout-partage-user-selection');
+        const input = $('#ajout-partage-autocomplete-input');
+        const options = {};
+        let result;
 
+        //Reset les données à l'ouvertur de la modal
+        infoSelect.innerHTML = 'Vous n\'avez sélectionner personne';
+        input.value = null;
+        $('#radio-partage-lecture').checked = true;
 
-        var elem = $('#ajout-partage-select-input');
-        var instances = M.FormSelect.init(elem, users);
-        var instance = M.FormSelect.getInstance(elem);
+        for(let i = 0; i < users.length; i++){ options[users[i].login] = null; }
 
-        console.log('instances',instances,'ELEM', elem, 'instance',instance)
-        console.log('oooooooooooo', instance.getSelectedValues())
-
-        //$('#ajout-partage-select-input').formSelect();
-
-
-        /*let select = document.createElement("select");
-        select.name = "users";
-        select.id = "ajout-partage-select-input";
-        for (let user of users){
-            let option = document.createElement("option");
-            option.value = user.id;
-            option.text = user.login;
-            select.appendChild(option);
-            console.log(user, option)
-        }
-        $('#ajout-partage-search-container').appendChild(select);
-        console.log($('#ajout-partage-select-input'))*/
+        var elem = $('#ajout-partage-autocomplete-input');
+        M.Autocomplete.init(elem, {data:options, minLength: 3, onAutocomplete: e =>{
+                result = users.filter(x => x.login === e);
+                this.selectedUser = result[0];
+                infoSelect.innerHTML = (`Vous avez sélectionné ${result[0].displayname}`);
+        }});
 
         this.getModal('#modal-ajout-partage').open();
+    }
+
+    async ajoutPartage(event){
+        try{
+        const radio = $('#ajout-partage-radio');
+        const radioValue = radio.elements["droit"].value;
+        if(!(!!this.selectedUser)) return this.toast('Aucun utilisateur renseigné, veuillez sélectionner un utilisateur dans la barre de recherche');
+        let partage = new Partage(null, this.selectedUser.id, this.listId, radioValue);
+        this.model.insertPartage(partage)
+            .then(this.getModal('#modal-ajout-partage').close())
+            .catch( e=> console.log(e))
+        }catch (e) {
+            console.log('Erreur : : ', e)
+        }
+
+    }
+
+    async openPartage(id){
+        let content = '';
+        const list = await this.model.getList(id);
+        const sharedUsers = await this.model.getAllPartageFromList(id);
+        const modal = this.getModal('#modal-show-partage');
+        const body = $('#modal-show-partage-body');
+        let droit;
+        $('#modal-show-partage-title').innerHTML = `Partages pour la liste ${list.label} du ${list.date.toLocaleDateString()}`;
+        modal.open();
+        if(sharedUsers.length !== 0 || !(!!sharedUsers)){
+            //Entête du tableau
+            content += '\n' +
+                '        <div class="row">\n' +
+                '            <b><div class="col s4">Nom</div>\n' +
+                '                <div class="col s4">Login</div>\n' +
+                '                <div class="col s2">Droit</div>\n' +
+                '                <div class="col s1">Actions</div></b>\n' +
+                '        </div>';
+            //Body du tableau -> tous les partages
+            for (const sharedUser of sharedUsers) {
+                droit =(sharedUser.droit ? "Lecture Écriture" : "Lecture seule");
+                    content += `
+                            <div id="row-${sharedUser.id}" class="row row-partage">
+                                <div class="col s4">${sharedUser.displayname}</div>
+                                <div class="col s4">${sharedUser.login}</div>
+                                <div class="col s2">${droit}</div>
+                                <div class="col s1">
+                                <!--<a class="btn waves-effect waves-light" title="Modifier" onclick=""><i class="material-icons">create</i></a>-->
+                                <a class="btn waves-effect waves-light" title="Supprimer" onclick="indexController.deletePartage(${sharedUser.id})"><i class="material-icons">delete</i></a>
+                                </div>
+                            </div>
+                        `
+            }
+            body.innerHTML = content;
+        }
+        else{
+            body.innerHTML = '<h5 style="margin-left: 15px;">Aucun partage disponible pour la liste.</h5>'
+        }
+
+    }
+    async deletePartage(id){
+        try{
+            let e = $(`#row-${id}`);
+            let partage = await this.model.getPartage(id);
+            if(!this.checkError(partage)) return;
+            if(confirm("Êtes-vous sûr de vouloir supprimer ce partage ? ")){
+                this.model.deletePartage(id);
+                e.parentNode.removeChild(e);
+            }
+        }catch (e) {
+            console.log(e);
+            this.displayServiceError();
+        }
     }
 
 }

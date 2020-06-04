@@ -48,6 +48,7 @@
 <div id="modal-ajout-partage" class="modal">
     <div class="modal-content">
         <h4 class="modal-title">Partager la liste</h4>
+        <hr style="margin: 5px;">
         <div class="row">
             <div class="col s5">
                 <h6>Sélectionner l'utilisateur : </h6>
@@ -60,20 +61,20 @@
                 <div id="ajout-partage-search" class="col s5">
                     <div class="input-field col s10">
                         <i class="material-icons prefix">search</i>
-                        <select id="ajout-partage-select-input">
-                        </select>
+                        <input type="text" id="ajout-partage-autocomplete-input" class="autocomplete" autocomplete="off">
+                        <label for="ajout-partage-autocomplete-input">Utilisateur</label>
                     </div>
                 </div>
-                <div id="ajout-partage-radio" class="col s5" onchange="console.log($('#ajout-partage-radio'))">
+                <form id="ajout-partage-radio" class="col s5">
                     <label>
-                        <input class="with-gap" name="group3" type="radio" id="partage-ajout-radio-lecture" value="false" checked />
+                        <input id="radio-partage-lecture" class="with-gap" name="droit" type="radio" value="false" checked />
                         <span>Lecture seule</span>
                     </label>
                     <label>
-                        <input class="with-gap" name="group3" type="radio"  id="partage-ajout-radio-ecriture" value="true" />
+                        <input class="with-gap" name="droit" type="radio"  value="true" />
                         <span>Lecture écriture</span>
                     </label>
-                </div>
+                </form>
         </div>
         <div class="row">
             <div class="col s5">
@@ -84,8 +85,19 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a id="btn-valid-ajout-partage" class="waves-effect waves-light btn" onclick="indexController.updateCourse()"><i class="material-icons left">check</i>Valider</a>
+            <a id="btn-valid-ajout-partage" class="waves-effect waves-light btn" onclick="indexController.ajoutPartage(event)"><i class="material-icons left">check</i>Valider</a>
             <a class="modal-close waves-effect waves-teal btn-flat">Quitter</a>
         </div>
     </div>
+</div>
+
+<!-- Modal Structure Pour l'ajout de partage -->
+<div id="modal-show-partage" class="modal">
+        <h4 id="modal-show-partage-title" >Tous les partages de la liste</h4>
+        <hr style="margin: 5px;">
+        <div id="modal-show-partage-body" class="row">
+        </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Quitter</a>
+        </div>
 </div>

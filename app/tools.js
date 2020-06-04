@@ -19,7 +19,7 @@ function fetchJSON(url, token) {
             }
         })
         .catch(err => {
-            console.log(err, 'eeee')
+            console.log(err)
             reject(err);
         }))
 }
