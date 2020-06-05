@@ -68,8 +68,11 @@ class IndexController extends BaseController {
             let list = await this.model.getList(id);
             if(!this.checkError(list)) return;
             if(confirm("Êtes-vous sûr de vouloir supprimer cette liste de course ? ")){
+                this.deletedList = {};
+                this.deletedList.List = list;
+                this.deletedList.Items = [];
+                for (const item of await this.model.getAllItemsFromList(list.id)){ this.deletedList.Items.push(item); }
                 this.model.deleteList(id);
-                this.deletedList = list;
                 e.parentNode.removeChild(e);
                 this.displayDeletedMessage('indexController.undoDelete()');
                 this.showCourse();
@@ -129,12 +132,19 @@ class IndexController extends BaseController {
     }
 
     undoDelete() {
-        if (this.deletedList) {
-            this.model.insertList(this.deletedList).then(status => {
+        if (this.deletedList.List) {
+            this.model.insertList(this.deletedList.List).then(status => {
                 if (status == 200) {
-                    this.deletedList = null;
-                    this.displayUndoDone();
+                    Promise.all(this.deletedList.Items.map(async item => await this.model.insertItem(item))).then( _ => {
+                        this.deletedList.List = null;
+                        this.deletedList.Items = [];
+                        this.displayUndoDone();
+                    }).catch(e=> {
+                        console.log(e);
+                        this.displayServiceError();
+                    });
                 }
+
             }).then(_ =>this.showCourse())
                 .catch(_ => this.displayServiceError());
         }
