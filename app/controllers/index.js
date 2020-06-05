@@ -1,15 +1,14 @@
 class IndexController extends BaseController {
     constructor() {
         super();
-        this.showCourse();
+        if(sessionStorage.getItem('token')) this.showCourse();
     }
 
     async showCourse() {
         let content = '';
-        let listHeader = $('#lists-header');
-        let listContainer = $('#lists-body');
         try {
-            for (const list of await this.model.getAllLists()) {
+            const lists = await this.model.getAllLists();
+            for (const list of lists) {
                 if (!list.isarchived){
                     const date = list.date.toLocaleDateString();
                     content += `
@@ -28,7 +27,7 @@ class IndexController extends BaseController {
                 }
             }
 
-            listContainer.innerHTML = (content.trim() !== '' ? content : "Pas de liste");
+            $('#lists-body').innerHTML = (content.trim() !== '' ? content : "Pas de liste");
             $('#lists-container').style.display = "block";
         } catch (err) {
             console.log(err);
