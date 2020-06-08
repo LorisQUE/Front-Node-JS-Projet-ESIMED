@@ -6,7 +6,50 @@
         </div>
         <div class="input-field col s5">
             <input id="inputPass" type="password"><label for="inputPass" class="validate">Mot de Passe</label>
+            <a class="small-text link-no-href" onclick="alert('eh ben fallait s\'en rappeller hihi')">Mot de passe oublié</a>
         </div>
-        <a id="btnAdd" class="waves-effect waves-light btn" onclick="loginController.authenticate()"><i class="material-icons left">arrow_forward</i>Connecter</a>
+        <div class="row"><a class="link-no-href" onclick="loginController.modalInscription();">Inscription</a></div>
+        <div class="row"><a id="btnAdd" class="waves-effect waves-light btn btn-right" onclick="loginController.authenticate();"><i class="material-icons left">arrow_forward</i>Connecter</a></div>
+    </div>
+</div>
+
+
+<!-- Modal Structure pour création d'utilisateur -->
+<div id="modal-ajout-user" class="modal">
+    <h4 id="modal-ajout-user-title" >Création d'un compte</h4>
+    <hr style="margin: 5px;">
+    <form id="modal-ajout-user-body">
+        <div class="row">
+            <div class="input-field col s6">
+                <i class="material-icons prefix">account_circle</i>
+                <input id="inscription-input-nom" type="text" class="validate" required>
+                <label for="inscription-input-nom">Nom</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <i class="material-icons prefix">email</i>
+                <input id="inscription-input-mail" type="email" class="validate" required>
+                <label for="inscription-input-mail">E-Mail</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <i class="material-icons prefix">lock</i>
+                <input id="inscription-input-mdp" type="password" class="validate" required>
+                <label for="inscription-input-mdp">Mot de passe</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <i class="material-icons prefix">lock</i>
+                <input id="inscription-input-mdp-bis" type="password" class="validate" required>
+                <label for="inscription-input-mdp-bis">Répéter le mot de passe</label>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <a id="btn-valid-ajout-partage" class="waves-effect waves-light btn" onclick="loginController.ajoutUser()"><i class="material-icons left">check</i>Valider</a>
+        <a class="modal-close waves-effect waves-teal btn-flat">Quitter</a>
     </div>
 </div>

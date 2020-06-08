@@ -105,6 +105,7 @@ class IndexController extends BaseController {
             this.currentListUpdated.date = date;
             if(magasin != null && date != null){
                 await this.model.updateList(this.currentListUpdated);
+                this.toast(`La liste a bien été modifiée`);
                 this.getModal("#modal-modif-list").close();
                 this.showCourse();
             }
@@ -182,12 +183,13 @@ class IndexController extends BaseController {
         this.getModal('#modal-ajout-partage').open();
     }
 
-    async ajoutPartage(event){
+    async ajoutPartage(){
         try{
         const radio = $('#ajout-partage-radio');
         const radioValue = radio.elements["droit"].value;
         if(!(!!this.selectedUser)) return this.toast('Aucun utilisateur renseigné, veuillez sélectionner un utilisateur dans la barre de recherche');
         let partage = new Partage(null, this.selectedUser.id, this.listId, radioValue);
+        this.toast(`Le partage pour ${this.selectedUser.displayname} a bien été créer`);
         this.model.insertPartage(partage)
             .then(this.getModal('#modal-ajout-partage').close())
             .catch( e=> console.log(e))
@@ -241,9 +243,11 @@ class IndexController extends BaseController {
         try{
             let e = $(`#row-${id}`);
             let partage = await this.model.getPartage(id);
+            console.log(partage)
             if(!this.checkError(partage)) return;
             if(confirm("Êtes-vous sûr de vouloir supprimer ce partage ? ")){
                 this.model.deletePartage(id);
+                this.toast(`Le partage a bien été supprimé`);
                 e.parentNode.removeChild(e);
             }
         }catch (e) {

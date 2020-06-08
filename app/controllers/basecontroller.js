@@ -51,6 +51,12 @@ class BaseController {
         }
         return value
     }
+    emailIsValid (email) {
+        if(!/\S+@\S+\.\S+/.test(email)) //Si le mail n'est pas conforme à la regex
+            return this.toast("Le champs de l'email n'est pas bon");
+        else
+            return true;
+    }
     datepickerToFrench(){
         const Calender = $('.datepicker');
         M.Datepicker.init(Calender, {

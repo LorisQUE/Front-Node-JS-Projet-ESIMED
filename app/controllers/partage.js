@@ -73,6 +73,7 @@ class PartageController extends BaseController {
             this.currentListUpdated.date = date;
             if (magasin != null && date != null) {
                 await this.model.updateListPartage(this.currentListUpdated);
+                this.toast(`La liste a bien été modifiée`);
                 this.getModal("#modal-modif-list").close();
                 this.showCourse();
             }

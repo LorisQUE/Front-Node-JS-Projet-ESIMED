@@ -126,6 +126,7 @@ class ListController extends BaseController {
         if(quantite != null && label != null){
             this.flagDetailsProp ? await this.model.updateItem(this.currentItemUpdated) : await this.model.updatePartageItem(this.currentItemUpdated);
             this.flagDetailsProp ? this.showItems() : this.showItemsPartage();
+            this.toast(`L'élement a bien été modifiée`);
             this.getModal("#modal-modif-item").close();
         }
     }
