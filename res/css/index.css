@@ -13,6 +13,8 @@
 .container-connexion { width: 25%; background-color: aliceblue; border: darkgray 1px solid; border-radius: 3px; padding-left: 25px; padding-right: 25px; padding-bottom: 25px; }
 .container-connexion h5 { display: flex; justify-content: center; }
 .container-login { display: flex; justify-content: center; margin-top: 10%; }
+.container-login-inscr{ display: flex; justify-content: center; margin-top: 3%; }
+.container-inscription { margin-top: 5%; background-color: aliceblue; border: darkgray 1px solid; border-radius: 3px; padding-left: 25px; padding-right: 25px; padding-bottom: 25px; }
 .small-text { font-size: 11px; }
 .important-stuff { font-weight: bold; color: royalblue; }
 .link-no-href { cursor: pointer; }

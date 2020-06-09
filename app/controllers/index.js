@@ -243,7 +243,6 @@ class IndexController extends BaseController {
         try{
             let e = $(`#row-${id}`);
             let partage = await this.model.getPartage(id);
-            console.log(partage)
             if(!this.checkError(partage)) return;
             if(confirm("Êtes-vous sûr de vouloir supprimer ce partage ? ")){
                 this.model.deletePartage(id);

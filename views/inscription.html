@@ -1,0 +1,64 @@
+<div id="ajout-user" class=" container container-inscription">
+        <h4>Création d'un compte</h4>
+        <hr style="margin: 5px;">
+        <form id="ajout-user-body">
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input id="inscription-input-nom" type="text" class="validate" autocomplete="off" required>
+                    <label for="inscription-input-nom">Nom</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">email</i>
+                    <input id="inscription-input-mail" type="email" class="validate" autocomplete="off" required>
+                    <label for="inscription-input-mail">E-Mail</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">lock</i>
+                    <input id="inscription-input-mdp" type="password" class="validate" autocomplete="off" required>
+                    <label for="inscription-input-mdp">Mot de passe</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">lock</i>
+                    <input id="inscription-input-mdp-bis" type="password" class="validate" autocomplete="off" required>
+                    <label for="inscription-input-mdp-bis">Répéter le mot de passe</label>
+                </div>
+            </div>
+        </form>
+        <div>
+            <a id="btn-valid-ajout-partage" class="waves-effect waves-light btn" onclick="inscriptionController.ajoutUser()"><i class="material-icons left">check</i>Valider</a>
+            <a class="waves-effect waves-teal btn-flat" onclick="if(confirm('Êtes-vous certain de vouloir quitter le formulaire d\'inscription ?')) navigate('login')">Quitter</a>
+        </div>
+</div>
+
+
+<div class="container-login-inscr">
+    <div class="container-connexion" style="padding: 15px; text-align: center;">
+        Vous n'avez pas reçu votre mail de confirmation ? <br/><br/>
+        <a id="" class="waves-effect waves-light btn" onclick="inscriptionController.ouvrirModal();">Cliquez ici ! </a>
+    </div>
+</div>
+
+<!-- Modal Structure Pour renvoie mail -->
+<div id="modal-renvoie" class="modal">
+    <div class="modal-content">
+        <h4 class="modal-title">Renvoie d'un mail de confirmation</h4>
+        <div class="row">
+            <div class="input-field col s6">
+                <i class="material-icons prefix">email</i>
+                <input id="inscription-input-renvoie-mail" type="email" class="validate" autocomplete="off" required>
+                <label for="inscription-input-renvoie-mail">Adresse électronique</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btn-valid-modif" class="waves-effect waves-light btn" onclick="inscriptionController.resendEmailModal()"><i class="material-icons left">check</i>Valider</a>
+            <a class="modal-close waves-effect waves-teal btn-flat">Quitter</a>
+        </div>
+    </div>
+</div>

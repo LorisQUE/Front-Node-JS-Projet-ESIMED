@@ -121,7 +121,14 @@ class Model {
         }
         return users;
     };
-
+    async inscription(user){
+            const res = await this.userApi.inscription(user);
+            return res.status;
+    };
+    async resendEmail(login){
+        const res = await this.userApi.resendEmail(login);
+        return res.status;
+    }
     /*
     REGION DES PARTAGES
      */

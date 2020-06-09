@@ -18,10 +18,12 @@ class Item {
 }
 
 class User {
-    constructor(id, name, login) {
+    constructor(id, name, login, password, isConfirmed) {
         this.id = id;
         this.displayname = name;
         this.login = login;
+        this.password = password;
+        this.isConfirmed = isConfirmed;
     };
 }
 

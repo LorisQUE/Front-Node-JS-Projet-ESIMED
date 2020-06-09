@@ -57,7 +57,6 @@ class ListController extends BaseController {
         try {
             let e = $(`#row-${id}`);
             let item = this.flagDetailsProp ? await this.model.getItem(id) :  await this.model.getItemPartage(id);
-            console.log(item)
             if(!this.checkError(item)) return;
             if (confirm("Êtes-vous sûr de vouloir supprimer cette liste de course ? ")) {
                 this.flagDetailsProp ? await this.model.deleteItem(id) : await this.model.deletePartageItem(id);
