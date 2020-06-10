@@ -114,6 +114,10 @@ class Model {
     /*
     REGION DES USERS
      */
+    async getUserByToken(){
+        const user = await this.userApi.getByToken();
+        return user;
+    }
     async getAllUser(){
         let users = [];
         for (let user of await this.userApi.getAll()) {
@@ -127,6 +131,10 @@ class Model {
     };
     async resendEmail(login){
         const res = await this.userApi.resendEmail(login);
+        return res.status;
+    }
+    async updateUser(user){
+        const res = await this.userApi.update(user);
         return res.status;
     }
     /*

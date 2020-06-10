@@ -221,7 +221,7 @@ class IndexController extends BaseController {
             for (const sharedUser of sharedUsers) {
                 droit =(sharedUser.droit ? "Lecture Écriture" : "Lecture seule");
                     content += `
-                            <div id="row-${sharedUser.id}" class="row row-partage">
+                            <div id="row-partage-${sharedUser.id}" class="row row-partage">
                                 <div class="col s4">${sharedUser.displayname}</div>
                                 <div class="col s4">${sharedUser.login}</div>
                                 <div class="col s2">${droit}</div>
@@ -241,7 +241,7 @@ class IndexController extends BaseController {
     }
     async deletePartage(id){
         try{
-            let e = $(`#row-${id}`);
+            let e = $(`#row-partage-${id}`);
             let partage = await this.model.getPartage(id);
             if(!this.checkError(partage)) return;
             if(confirm("Êtes-vous sûr de vouloir supprimer ce partage ? ")){

@@ -52,14 +52,18 @@ class BaseController {
         return value
     };
     emailIsValid (email) {
-        if(!/\S+@\S+\.\S+/.test(email)) //Si le mail n'est pas conforme à la regex
-            return this.toast("Le champs de l'email n'est pas bon");
+        if(!/\S+@\S+\.\S+/.test(email)){ //Si le mail n'est pas conforme à la regex
+            this.toast("Le champs de l'email n'est pas bon");
+            return false;
+            }
         else
             return true;
     };
     passIsValid (pass, passBis) {
-        if ( pass != passBis )
-            return this.toast("Les mots de passes ne sont pas identiques");
+        if ( pass != passBis ){
+            this.toast("Les mots de passes ne sont pas identiques");
+            return false;
+        }
         else
             return true;
     }

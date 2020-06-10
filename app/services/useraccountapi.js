@@ -3,8 +3,11 @@ class UserAccountAPI extends BaseAPIService {
         super("useraccount")
     }
     getAll() {
-        return fetchJSON(this.url, this.token)
+        return fetchJSON(this.url+"all", this.token)
     };
+    getByToken(){
+        return fetchJSON(this.url, this.token)
+    }
     authenticate(login, password) {
         this.headers.set('Content-Type', 'application/x-www-form-urlencoded');
         return new Promise((resolve, reject) => fetch(`${this.url}/authenticate`, {
@@ -26,13 +29,20 @@ class UserAccountAPI extends BaseAPIService {
             headers: this.headers,
             body: JSON.stringify(user)
         });
-    }
+    };
     resendEmail(login){
-        // return fetchJSON(this.url+'/resend/'+login, this.token);
         this.headers.set( 'Content-Type', 'application/json' );
         return fetch(this.url+'/resend/'+login, {
             method: 'GET',
             headers: this.headers,
         })
-    }
+    };
+    update(user) {
+        this.headers.set( 'Content-Type', 'application/json' );
+        return fetch(this.url, {
+            method: 'PUT',
+            headers: this.headers,
+            body: JSON.stringify(user)
+        });
+    };
 }
