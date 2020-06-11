@@ -39,10 +39,17 @@ class UserAccountAPI extends BaseAPIService {
     };
     update(user) {
         this.headers.set( 'Content-Type', 'application/json' );
-        return fetch(this.url, {
+        return new Promise((resolve, reject) => fetch(this.url, {
             method: 'PUT',
             headers: this.headers,
             body: JSON.stringify(user)
-        });
+        }).then(res => {
+            if (res.status === 200) {
+                resolve(res.json())
+            } else {
+                reject(res.status)
+            }
+            reject(res);
+        }).catch(e => {console.log(e); reject(e)}));
     };
 }

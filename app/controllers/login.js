@@ -17,7 +17,9 @@ class LoginController extends BaseController {
                     console.log(err);
                     if (err == 401) {
                         this.toast("Adresse e-mail ou mot de passe incorrect");
-                    } else {
+                    } else if (err === 409){
+                        this.toast("Le compte n'a pas encore été validé");
+                    }else {
                         this.displayServiceError();
                     }
                 });
