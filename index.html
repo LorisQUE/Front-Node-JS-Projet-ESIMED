@@ -37,7 +37,11 @@
         if(sessionStorage.getItem('token')){
             navigate('index');
         }
-        else{
+        else if(window.location.search.indexOf('t') > -1 && window.location.search.indexOf('i') > -1){
+            $('#bandeau').style.display = "none";
+            navigate('reinitialisation');
+        }
+        else {
             $('#bandeau').style.display = "none";
             navigate("login");
         }

@@ -2,11 +2,13 @@
     <div class="container-connexion">
         <h5>Connexion</h5>
         <div class="input-field col s5">
+            <i class="material-icons prefix">mail</i>
             <input id="inputMail" type="text"><label for="inputMail" class="validate">Adresse e-mail</label>
         </div>
         <div class="input-field col s5">
+            <i class="material-icons prefix">lock</i>
             <input id="inputPass" type="password"><label for="inputPass" class="validate">Mot de Passe</label>
-            <a class="small-text link-no-href" onclick="alert('eh ben fallait s\'en rappeller hihi')">Mot de passe oublié</a>
+            <a class="small-text link-no-href" onclick="loginController.getModal('#modal-envoie-mail').open(); $('#reinitialisation-input-renvoie-mail').value = '';">Mot de passe oublié</a>
         </div>
         <div class="row"><a id="btnAdd" class="waves-effect waves-light btn btn-right" onclick="loginController.authenticate();"><i class="material-icons left">arrow_forward</i>Connecter</a></div>
     </div>
@@ -16,5 +18,24 @@
     <div class="container-connexion" style="padding: 15px; text-align: center;">
         Vous n'avez pas encore de compte ? <br/><br/>
         <a id="" class="waves-effect waves-light btn" onclick="navigate('inscription')">Créer un compte</a>
+    </div>
+</div>
+
+<!-- Modal Structure Pour envoie mail mdp oublié -->
+<div id="modal-envoie-mail" class="modal">
+    <div class="modal-content">
+        <h4 class="modal-title">Réinitialisation de mot de passe</h4>
+        <hr>
+        <div class="row">
+            <div class="input-field col s6">
+                <i class="material-icons prefix">email</i>
+                <input id="reinitialisation-input-renvoie-mail" type="email" class="validate" autocomplete="off" required>
+                <label for="reinitialisation-input-renvoie-mail">Adresse électronique</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btn-valid-modif" class="waves-effect waves-light btn" onclick="loginController.sendEmailModal()"><i class="material-icons left">check</i>Valider</a>
+            <a class="modal-close waves-effect waves-teal btn-flat">Quitter</a>
+        </div>
     </div>
 </div>

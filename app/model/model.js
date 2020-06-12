@@ -132,16 +132,8 @@ class Model {
     async resendEmail(login){
         const res = await this.userApi.resendEmail(login);
         return res.status;
-    }
-    /*async updateUser(user){
-        this.userApi.update(user).then(res => {
-            if (res.status === 200) {
-                return res.json()
-            }
-            return res.status;
-        });
+    };
 
-    }*/
     /*
     REGION DES PARTAGES
      */

@@ -30,6 +30,19 @@ class UserAccountAPI extends BaseAPIService {
             body: JSON.stringify(user)
         });
     };
+    reinitialisation(login){
+        this.headers.set( 'Content-Type', 'application/json' );
+        return new Promise((resolve, reject) => fetch(this.url+'/reinitialisation/'+login, {
+            method: 'POST',
+            headers: this.headers,
+        }).then(res => {
+            if (res.status === 200) {
+                resolve(res.status)
+            } else {
+                reject(res.status)
+            }
+        }).catch(err => reject(err)));
+    };
     resendEmail(login){
         this.headers.set( 'Content-Type', 'application/json' );
         return fetch(this.url+'/resend/'+login, {
@@ -37,6 +50,20 @@ class UserAccountAPI extends BaseAPIService {
             headers: this.headers,
         })
     };
+    reinitPass(token, id, pass){
+        this.headers.set( 'Content-Type', 'application/json' );
+        return new Promise((resolve, reject) => fetch(this.url+'/change-pass', {
+            method: 'PUT',
+            headers: this.headers,
+            body: JSON.stringify({token: token , id: id, pass: pass})
+        }).then(res => {
+            if (res.status === 200) {
+                resolve(res.status)
+            } else {
+                reject(res.status)
+            }
+        }).catch(err => reject(err)));
+    }
     update(user) {
         this.headers.set( 'Content-Type', 'application/json' );
         return new Promise((resolve, reject) => fetch(this.url, {

@@ -25,6 +25,21 @@ class LoginController extends BaseController {
                 });
         }
     };
+
+    sendEmailModal(){
+        const login = $('#reinitialisation-input-renvoie-mail').value;
+        //Si le mail est valide
+        if(this.emailIsValid(login)){
+            this.svc.reinitialisation(login).then( async (err, res) => {
+               if(res === 404) this.toast('Aucun compte n\'est affilié à ce mail');
+               else {
+
+
+                   this.getModal('#modal-envoie-mail').close();
+               }
+            });
+        }
+    }
 }
 
 window.loginController = new LoginController();
